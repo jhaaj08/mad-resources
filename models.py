@@ -4,7 +4,7 @@ from flask_security.models import fsqla_v3 as fsq
 
 fsq.FsModels.set_db_info(db)
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
     email = db.Column(db.String, nullable = False, unique = True)
     password = db.Column(db.String,nullable = False)
@@ -12,7 +12,7 @@ class User(db.Model):
     fs_uniquifier = db.Column(db.String, nullable=False)
     roles = db.relationship('Role', secondary='user_roles')
 
-class Role(db.Model):
+class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String, nullable = False, unique = True)
     description = db.Column(db.String,nullable = False)

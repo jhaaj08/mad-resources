@@ -8,6 +8,7 @@ def create_app():
     app.config["SECRET_KEY"] = "should-not-be-exposed"
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data.db"
     app.config['SECURITY_PASSWORD_SALT'] = "salty_password"
+    app.config['WTF_CSRF_ENABLED'] = False
 
     db.init_app(app)
 

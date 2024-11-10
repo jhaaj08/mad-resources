@@ -24,7 +24,7 @@ def create_app():
         db.create_all()
         create_data(user_datastore)
 
-    views.create_view(app)
+    views.create_view(app, user_datastore)
 
 
 

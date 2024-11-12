@@ -2,6 +2,7 @@ from flask import Flask
 import views
 from extensions import db, security
 from create_initial_data import create_data
+import resources
 
 def create_app():
     app = Flask(__name__)
@@ -25,6 +26,7 @@ def create_app():
         create_data(user_datastore)
 
     views.create_view(app, user_datastore)
+    resources.api.init_app(app)
 
 
 

@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, render_template_string
 from flask_security import auth_required, current_user, roles_required, SQLAlchemyUserDatastore
 from flask_security.utils import hash_password, verify_password
 from extensions import db
@@ -28,6 +28,16 @@ def create_view(app, user_datastore : SQLAlchemyUserDatastore):
         else :
             return jsonify({'message' : 'invalid password'}), 400
 
+    @app.route('/profile')
+    @auth_required('token')
+    def profile():
+        return render_template_string(
+            """
+            <h1> This is a profile page </h1>
+            <p> Welcome, {{current_user.email}}
+            <a href="/logout">logout</a>
+            """
+        )
     
     @app.route('/register', methods=['POST'])
     def register():

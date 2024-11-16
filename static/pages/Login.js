@@ -1,4 +1,5 @@
 import router from "../utils/router.js";
+import store from "../utils/store.js";
 
 const Login = {
   template: `
@@ -38,7 +39,9 @@ const Login = {
         const data = await res.json();
         console.log(data);
         // Handle successful login, e.g., redirect or store token
-        router.push("/profile");
+        router.push("/dashboard");
+        store.commit('setLogin');
+        //define role also later
       } else {
         const errorData = await res.json();
         console.error("Login failed:", errorData);

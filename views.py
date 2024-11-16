@@ -1,5 +1,5 @@
 from flask import render_template, request, jsonify, render_template_string
-from flask_security import auth_required, current_user, roles_required, SQLAlchemyUserDatastore
+from flask_security import auth_required, current_user, roles_required, SQLAlchemyUserDatastore, roles_accepted
 from flask_security.utils import hash_password, verify_password
 from extensions import db
 
@@ -64,3 +64,19 @@ def create_view(app, user_datastore : SQLAlchemyUserDatastore):
             return jsonify({'message':'error in user creation'}), 408
         return jsonify({'message':'user_created'}),200
     
+    @app.route('/activate-inst/<id>', methods=['GET'])
+    @roles_accepted('admin')
+    def activate_inst(id):
+        user = user_datastore.find_user(id=id)
+        if not user:
+            return jsonify({'message': 'user not present'}), 400
+
+        #check if instructor is already activated 
+        if (user.active == True):
+            return jsonify({'message': 'user already active'}), 400
+
+
+        user.active = True
+        db.session.commit()
+        return jsonify({'message': 'user has been activated'})
+

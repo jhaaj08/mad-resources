@@ -22,14 +22,14 @@ study_material_fields = {
 class StudyMaterial(Resource):
 
     # get request will run this function (retrieve)
-    @auth_required('token','session')
+    @auth_required('token')
     @marshal_with(study_material_fields)
     def get(self):
         all_study_resources = StudyResource.query.all()
         return all_study_resources
     
     # post request will run this function (create)
-    @auth_required('token', 'session')
+    @auth_required('token')
     def post(self):
         args = parser.parse_args()
         study_resource = StudyResource(creator_id = 1, is_approved = False, **args )

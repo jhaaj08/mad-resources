@@ -25,7 +25,7 @@ const Login = {
   methods: {
     async submitInfo() {
       const origin = window.location.origin;
-      const url = `${origin}/login`;
+      const url = `${origin}/user-login`;
       const res = await fetch(url, {
         method: "POST",
         headers: {
@@ -37,7 +37,13 @@ const Login = {
 
       if (res.ok) {
         const data = await res.json();
-        console.log(data);
+        console.log(data)
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('role', data.role);
+        sessionStorage.setItem('email', data.email);
+        sessionStorage.setItem('id', data.id);
+
+        console.log(sessionStorage.getItem('token'));
         // Handle successful login, e.g., redirect or store token
         router.push("/dashboard");
         store.commit('setLogin');

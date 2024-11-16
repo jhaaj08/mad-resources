@@ -4,6 +4,7 @@ import Logout from "../pages/Logout.js";
 import Signup from "../pages/Signup.js";
 import DashboardStud from "../pages/DashboardStud.js"
 import store from "./store.js";
+import Profile from "../pages/Profile.js";
 
 
 const routes = [
@@ -11,7 +12,8 @@ const routes = [
     {path: '/login', component: Login},
     {path: '/logout', component: Logout},
     {path: '/signup', component: Signup},
-    {path: '/dashboard', component: DashboardStud}
+    {path: '/dashboard', component: DashboardStud},
+    {path: '/profile', component: Profile},
 
 ];
 

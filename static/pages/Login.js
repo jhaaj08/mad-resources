@@ -45,13 +45,21 @@ const Login = {
 
         console.log(sessionStorage.getItem('token'));
         // Handle successful login, e.g., redirect or store token
-        router.push("/dashboard");
-        store.commit('setLogin');
-        //define role also later
+        this.$store.commit('setLogin', true)
+        this.$store.commit('setRole', data.role)
+
+        switch (data.role) {
+          case "stud":
+            this.$router.push("/dashboard-stud");
+            break;
+          case "inst":
+            this.$router.push("/dashboard-inst");
+            break;
+          case "admin":
+            this.$router.push("/dashboard-admin");
+        }
       } else {
-        const errorData = await res.json();
-        console.error("Login failed:", errorData);
-        // Handle login error
+        console.error("Login Failed");
       }
     },
   },

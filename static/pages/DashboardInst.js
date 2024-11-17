@@ -5,12 +5,12 @@ const DashBoardInst = {
             <h1>Instructor dashboard</h1>
             <h2>New Resources</h2>
             <div v-for="res in newResources" :key="res.id">
-              <StudyResource :topic="res.topic" :content="res.content" creator="me" :approvalRequired="true" :approvalID="res.id" />
+              <StudyResource :topic="res.topic" :content="res.content" :creator="'me'" :approvalRequired="true" :approvalID="res.id" />
             </div>
 
             <h2>Approved Resources </h2>
             <div v-for="resource in allResources" :key="resource.id">   
-                    <StudyResource :topic="resource.topic" :content="resource.content" creator="me"/>
+              <StudyResource :topic="resource.topic" :content="resource.content" :creator="'me'" />
             </div>
     </div>`,
   data() {

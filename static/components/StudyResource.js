@@ -37,7 +37,6 @@ const StudyResource = {
     },
     creator: {
       type: String,
-      required: true,
     },
     approvalRequired: {
       type: Boolean,

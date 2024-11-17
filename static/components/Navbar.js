@@ -4,12 +4,12 @@ const Navbar = {
     template: `
     <nav>
       <router-link to='/'>Home</router-link>
-      <router-link v-if="!loggedIn" to='/login'>Login</router-link>
-      <router-link v-if="!loggedIn" to='/signup'>Signup</router-link>
-      <router-link v-if="loggedIn" to='/logout'>Logout</router-link>
-      <router-link to='/profile'>Profile</router-link>
-      <router-link to='/dashboard-inst'>Dashboard Instructor</router-link>
-      <router-link  to='/dashboard'>Dashboard</router-link>
+      <router-link v-if="!state.loggedIn" to='/login'>Login</router-link>
+      <router-link v-if="!state.loggedIn" to='/signup'>Signup</router-link>
+      <router-link v-if="state.loggedIn" to='/logout'>Logout</router-link>
+      <router-link v-if="state.loggedIn" to='/profile'>Profile</router-link>
+      <router-link v-if="state.loggedIn && state.role === 'inst' "to='/dashboard-inst'>Dashboard</router-link>
+      <router-link v-if="state.loggedIn && state.role === 'stud' " to='/dashboard'>Dashboard</router-link>
     </nav>
     ` ,
     data() {
@@ -17,9 +17,21 @@ const Navbar = {
             url: window.location.origin + "/logout",
         };
     },
+    methods: {
+        logout() {
+          // clear session
+          sessionStorage.clear();
+    
+          // clear vuex login info
+          this.$store.commit("logout");
+          this.$store.commit("setRole", null);
+    
+          this.$router.push("/");
+        },
+      },    
     computed: {
-        loggedIn() {
-            return this.$store.state.loggedIn;
+        state() {
+            return this.$store.state;
         }
     },
 };

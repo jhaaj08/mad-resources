@@ -26,7 +26,8 @@ class StudyMaterial(Resource):
     @marshal_with(study_material_fields)
     def get(self):
         all_study_resources = StudyResource.query.all()
-        return all_study_resources
+        filtered = [res for res in all_study_resources if res.is_approved]
+        return filtered
     
     # post request will run this function (create)
     @auth_required('token')

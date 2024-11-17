@@ -2,6 +2,7 @@ from flask import render_template, request, jsonify, render_template_string
 from flask_security import auth_required, current_user, roles_required, SQLAlchemyUserDatastore, roles_accepted
 from flask_security.utils import hash_password, verify_password
 from extensions import db
+from models import StudyResource
 
 def create_view(app, user_datastore : SQLAlchemyUserDatastore):
 
@@ -80,3 +81,32 @@ def create_view(app, user_datastore : SQLAlchemyUserDatastore):
         db.session.commit()
         return jsonify({'message': 'user has been activated'})
 
+    @app.route('/verify-resource/<id>')
+    @roles_required('inst')
+    def activate_resource(id):
+        resource = StudyResource.query.get(id)
+        resource.is_approved = True
+        db.session.commit()
+        if not resource:
+            return jsonify({'message': 'no such resource'}),400
+        return jsonify({'message': 'resource got', 'resource' : resource.content}),200
+
+    @app.route('/inactive-inst-list', methods =['GET'])
+    @roles_accepted('admin')
+    def get_inactive_instructors():
+        all_users=user_datastore.user_model().query.all()
+    
+        inactive_instructors = [
+            user for user in all_users
+            if not user.active and any(role.name == 'inst' for role in user.roles)
+        ]
+
+        results = [
+            {
+                'id' : user.id,
+                'email' : user.email,
+            }
+            for user in inactive_instructors
+        ]
+
+        return jsonify(results), 200

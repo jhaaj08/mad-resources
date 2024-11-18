@@ -9,6 +9,7 @@ const Navbar = {
       <router-link v-if="state.loggedIn" to='/logout'>Logout</router-link>
       <router-link v-if="state.loggedIn" to='/profile'>Profile</router-link>
       <router-link v-if="state.loggedIn && state.role === 'inst' "to='/dashboard-inst'>Dashboard</router-link>
+      <router-link v-if="state.loggedIn && state.role === 'admin' "to='/dashboard-admin'>Dashboard</router-link>
       <router-link v-if="state.loggedIn && state.role === 'stud' " to='/dashboard'>Dashboard</router-link>
     </nav>
     ` ,

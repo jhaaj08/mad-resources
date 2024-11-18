@@ -3,8 +3,15 @@ from flask_security import auth_required, current_user, roles_required, SQLAlche
 from flask_security.utils import hash_password, verify_password
 from extensions import db
 from models import StudyResource
+import datetime
 
-def create_view(app, user_datastore : SQLAlchemyUserDatastore):
+def create_view(app, user_datastore : SQLAlchemyUserDatastore, cache):
+
+    #cache demo 
+    @app.route('/cachedemo')
+    @cache.cached(timeout=50)
+    def cacheDemo():
+        return {"time": datetime.datetime.now()}
 
     @app.route('/')
     def home():

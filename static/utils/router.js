@@ -4,6 +4,7 @@ import Logout from "../pages/Logout.js";
 import Signup from "../pages/Signup.js";
 import DashboardStud from "../pages/DashboardStud.js";
 import DashboardInst from "../pages/DashboardInst.js";
+import DashboardAdmin from "../pages/DashboardAdmin.js";
 import Profile from "../pages/Profile.js";
 import store from "./store.js";
 
@@ -14,7 +15,9 @@ const routes = [
   { path: '/signup', component: Signup },
   { path: '/dashboard', component: DashboardStud, meta: {requiresLogin: true, role: 'stud' } },
   { path: '/dashboard-inst', component: DashboardInst, meta: {requiresLogin: true, role: 'inst' } },
+  { path: '/dashboard-admin', component: DashboardAdmin, meta: {requiresLogin: true, role: 'admin' } },
   { path: '/profile', component: Profile },
+
 ];
 
 const router = new VueRouter({

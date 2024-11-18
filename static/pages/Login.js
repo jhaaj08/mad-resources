@@ -50,7 +50,7 @@ const Login = {
 
         switch (data.role) {
           case "stud":
-            this.$router.push("/dashboard-stud");
+            this.$router.push("/dashboard");
             break;
           case "inst":
             this.$router.push("/dashboard-inst");

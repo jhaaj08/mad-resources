@@ -21,6 +21,7 @@ const Logout = {
   
         if (res.ok) {
           this.logoutSuccess = true; // Correctly set boolean value
+          this.$router.push("/login");
         } else {
           console.error("Logout request failed:", res.status, res.statusText);
         }

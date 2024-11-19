@@ -3,6 +3,7 @@ from models import StudyResource
 from flask_excel import make_response_from_query_sets
 import time
 from models import StudyResource
+from mail_service import send_email
 
 # igonre_resuls mean you dont store the result, where results don't matter
 
@@ -21,3 +22,9 @@ def create_csv():
         file.write(csv_out.data)
 
     return 'file.csv'
+
+
+@shared_task
+def daily_reminder(to,sub, message):
+    send_email(to, sub, message)
+    return "OK"

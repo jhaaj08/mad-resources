@@ -6,6 +6,8 @@ from create_initial_data import create_data
 import resources
 from worker import celery_init_app 
 import flask_excel as excel
+from celery.schedules import crontab
+from tasks import daily_reminder
 
 celery_app = None  # Declare celery_app globally for better accessibility
 
@@ -57,6 +59,18 @@ app = create_app()
 celery_app = celery_init_app(app) 
 excel.init_excel(app)
 # Run the Flask application if this script is called directly
+
+@celery_app.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+    # Calls test('hello') every 10 seconds.
+    # sender.add_periodic_task(10.0, daily_reminder.s('test@gmail', 'Testing', '<h2> content here </h2>'), name='add every 10')
+
+    # # Executes every Monday morning at 7:30 a.m.
+    sender.add_periodic_task(
+        crontab(hour=14, minute=5, day_of_week=2),
+        daily_reminder.s('test2@gmail', 'from crontab', 'content'),
+    )   
+
 if __name__ == "__main__":
     
     app.run(debug=True)

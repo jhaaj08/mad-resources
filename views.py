@@ -1,12 +1,61 @@
-from flask import render_template, request, jsonify, render_template_string
+from flask import render_template, request, jsonify, render_template_string, send_file
 from flask_security import auth_required, current_user, roles_required, SQLAlchemyUserDatastore, roles_accepted
 from flask_security.utils import hash_password, verify_password
 from extensions import db
 from models import StudyResource
 import datetime
+from tasks import add, create_csv
+from celery.result import AsyncResult
 
 def create_view(app, user_datastore : SQLAlchemyUserDatastore, cache):
 
+    @app.route('/start')
+    def start_export():
+        task = create_csv.delay()
+        return jsonify({'task_id': task.id})
+
+    @app.route('/random')
+    def random_export():
+        task = "random"
+        return jsonify({'task_id': task})
+    
+    @app.route('/get-csv/<task_id>')
+    def get_csv(task_id):
+        result = AsyncResult(task_id)
+
+        if result.ready():
+            return send_file('./user-files/file.csv')
+        else:
+            return "task not ready", 405
+
+
+    #celerydemo
+    @app.route('/celerydemo')
+    def celery_demo():
+        task = add.delay(10, 20)
+        if task:
+            print(f"Task created with ID: {task.id}")
+            return jsonify({'task_id': task.id})
+        else:
+            return jsonify({'message': 'Task creation failed'}), 500
+    
+
+    @app.route('/get-task/<task_id>')
+    def get_task(task_id):
+        # Assuming your Celery app is initialized as 'celery_app' in app.py
+        task_result = AsyncResult(task_id, app=app.extensions["celery"])
+
+        # Check the state of the task
+        if task_result.state == 'PENDING':
+            return jsonify({'state': 'PENDING'}), 202
+        elif task_result.state == 'SUCCESS':
+            return jsonify({'state': 'SUCCESS', 'result': task_result.result}), 200
+        elif task_result.state == 'FAILURE':
+            return jsonify({'state': 'FAILURE', 'error': str(task_result.info)}), 500
+        else:
+            return jsonify({'state': task_result.state}), 200
+
+        
     #cache demo 
     @app.route('/cachedemo')
     @cache.cached(timeout=50)
